@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link rel="stylesheet" href="details.css">
+</head>
+<body>
+    <div class="details-container">
+        <h2>User Details</h2>
+        <div id="userDetails"></div>
+        <button onclick="goBack()">Go Back</button>
+    </div>
+    <script>
+        // Function to retrieve user details from local storage and display them
+        function displayUserDetails() {
+            const userDetails = {
+                fullName: localStorage.getItem("fullName"),
+                email: localStorage.getItem("email"),
+                dob: localStorage.getItem("dob"),
+                phone: localStorage.getItem("phone"),
+                address: localStorage.getItem("address")
+            };
+
+            const userDetailsDiv = document.getElementById("userDetails");
+
+            if (userDetails.fullName) {
+                userDetailsDiv.innerHTML = `
+                    <p><strong>Full Name:</strong> ${userDetails.fullName}</p>
+                    <p><strong>Email:</strong> ${userDetails.email}</p>
+                    <p><strong>Date of Birth:</strong> ${userDetails.dob}</p>
+                    <p><strong>Phone Number:</strong> ${userDetails.phone}</p>
+                    <p><strong>Address:</strong> ${userDetails.address}</p>
+                `;
+            } else {
+                userDetailsDiv.innerHTML = "<p>No user details found.</p>";
+            }
+        }
+
+        // Function to navigate back to the form page
+        function goBack() {
+            window.location.href = "form.html";
+        }
+
+        // Call the function to display user details on page load
+        window.onload = displayUserDetails;
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="full-page">
+        <div class="navbar">
+            <div>
+                <a href="login.html"></a>
+            </div>
+            <nav>
+                <ul id="MenuItems">
+                    <li><a href="#">Home</a></li>
+                    <li>
+                        <button class="loginbtn" onclick="document.getElementById('login-form').style.display='block'" style="width:auto;">
+                            Login
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div id="login-form" class="login-page">
+            <div class="form-box">
+                <div class="button-box">
+                    <div id="btn"></div>
+                    <button type="button" onclick="login()" class="toggle-btn">Log In</button>
+                    <button type="button" onclick="register()" class="toggle-btn">Register</button>
+                </div>
+                <!-- Login Form -->
+                <form id="login" class="input-group-login">
+                    <input type="text" id="email" class="input-field" placeholder="Email Id" required>
+                    <input type="password" id="password" class="input-field" placeholder="Enter Password" required>
+                    <input type="checkbox" class="check-box">
+                    <span>Remember Password</span>
+                    <button type="submit" class="submit-btn">Log in</button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register" class="input-group-register" onsubmit="handleRegistration(event)">
+                    <input type="text" id="registerFirstName" class="input-field" placeholder="First Name" required>
+                    <input type="text" id="registerLastName" class="input-field" placeholder="Last Name" required>
+                    <input type="email" id="registerEmail" class="input-field" placeholder="Email Id" required>
+                    <input type="password" id="registerPassword" class="input-field" placeholder="Enter Password" required>
+                    <input type="password" id="registerConfirmPassword" class="input-field" placeholder="Confirm Password" required>
+                    <input type="checkbox" class="check-box">
+                    <span>I agree to the terms and conditions</span>
+                    <button type="submit" class="submit-btn">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between login and register forms
+        var x = document.getElementById('login');
+        var y = document.getElementById('register');
+        var z = document.getElementById('btn');
+
+        function register() {
+            x.style.left = '-400px';
+            y.style.left = '50px';
+            z.style.left = '110px';
+        }
+
+        function login() {
+            x.style.left = '50px';
+            y.style.left = '450px';
+            z.style.left = '0px';
+        }
+
+        // Close the modal when clicking outside
+        var modal = document.getElementById('login-form');
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+
+        // Handle login form submission
+        document.getElementById("login").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // Retrieve users from localStorage
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+
+            // Find the user that matches the entered email and password
+            const user = users.find(user => user.email === email && user.password === password);
+
+            if (user) {
+                alert("Login successful!");
+                window.location.href = "form.html"; // Redirect to the User Information Form page
+            } else {
+                alert("Invalid email or password. Please try again.");
+            }
+        });
+
+        // Handle registration form submission
+        function handleRegistration(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            const firstName = document.getElementById('registerFirstName').value;
+            const lastName = document.getElementById('registerLastName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            // Retrieve existing users from localStorage
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+
+            // Check if the email already exists
+            const existingUser = users.find(user => user.email === email);
+            if (existingUser) {
+                alert("An account with this email already exists.");
+                return;
+            }
+
+            // Create a new user object
+            const newUser = {
+                firstName,
+                lastName,
+                email,
+                password
+            };
+
+            // Save the new user to localStorage
+            users.push(newUser);
+            localStorage.setItem("users", JSON.stringify(users));
+
+            alert("Registration successful! You can now log in.");
+        }
+    </script>
+</body>
+</html>
